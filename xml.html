@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+
+	var myUrl = 'http://api.irishrail.ie/realtime/realtime.asmx/getStationDataByNameXML?StationDesc=seapoint&numMins=30';
+	var proxy = 'https://cors-anywhere.herokuapp.com/';
+
+	$.ajax({
+	    
+	    url: proxy + myUrl,
+	    complete:function(data){
+	      
+	          var i;
+			  var xmlDoc = data.responseXML;
+			  
+			  var table ="<table align='center' class='table table-striped'><tr><th>Direction</th><th>Traincode</th><th>Duein</th><th>Late</th><th>Exparrival</th><th>Scharrival</th></tr>";
+			  var x = xmlDoc.getElementsByTagName("objStationData");
+			  for (i = 0; i <x.length; i++) { 
+			    table += "<tr><td>" +
+			    x[i].getElementsByTagName("Direction")[0].childNodes[0].nodeValue +
+			    "</td><td>" +
+			    x[i].getElementsByTagName("Traincode")[0].childNodes[0].nodeValue +
+			    "</td><td>" +
+			    x[i].getElementsByTagName("Duein")[0].childNodes[0].nodeValue +
+			    "</td><td>" +
+			    x[i].getElementsByTagName("Late")[0].childNodes[0].nodeValue +
+			    "</td><td>" +
+			    x[i].getElementsByTagName("Exparrival")[0].childNodes[0].nodeValue +
+			    "</td><td>" +
+			    x[i].getElementsByTagName("Scharrival")[0].childNodes[0].nodeValue +
+			    "</td></tr>"
+			    ;
+			  }
+			  table += "</table>";
+			  //document.getElementById('iframeID').contentWindow.document.body.innerHTML
+			  document.getElementById("iframeID").srcdoc = table;
+	    }
+	});
+	</script>
+</head>
+<body>
+	 <iframe id="iframeID" width="500" height="400"></iframe>
+</body>
+</html>
+
